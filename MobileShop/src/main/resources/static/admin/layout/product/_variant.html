@@ -1,0 +1,212 @@
+<div class="card mb-4">
+	<h5 class="card-header">Thông tin chi tiết</h5>
+	<div class="card-body">
+		<form id="formAccountSettings" method="POST" onsubmit="return false">
+			<div class="row">
+				<div class="mb-3 col-md-7">
+					<div class="mb-3 col-md-12">
+						<label for="image" class="form-label">HÌNH ẢNH SẢN PHẨM</label>
+						<div
+							class="d-flex align-items-start align-items-sm-center gap-4 form-control">
+							<img ng-src="/variants/{{variant.image}}" alt="image-variant" class="d-block rounded" height="100" width="100" id="uploadedAvatar" />
+							<div class="button-wrapper">
+								<label for="image-variant" class="btn btn-primary me-2 mb-4" tabindex="0"> 
+									<span class="d-none d-sm-block">Tải lên ảnh mới</span> <i class="bx bx-upload d-block d-sm-none"></i> 
+									<input onchange="angular.element(this).scope().imageVariantChanged(this.files)" type="file" id="image-variant" class="account-file-input" hidden accept="image/png, image/jpeg" />
+								</label>
+								<button type="button"
+									class="btn btn-outline-secondary account-image-reset mb-4">
+									<i class="bx bx-reset d-block d-sm-none"></i> <span class="d-none d-sm-block">Cài lại</span>
+								</button>
+								<p ng-show="!error_variant.image" class="text-muted mb-0">Tải hình ảnh cho sản phẩm.</p>
+								<p class="text-danger" ng-show="error_variant.image">{{error_variant.image}}</p>
+							</div>
+						</div>
+					</div>
+					<div class="mb-3 col-md-12">
+						<label for="code_product" class="form-label">MÃ SẢN PHẨM</label>
+						<div class="form-control">{{variant.product.code}}</div>
+						<span class="text-danger" ng-show="error_variant.product">{{error_variant.product}}</span>
+					</div>
+					<div class="mb-3 col-md-12">
+						<label for="name_product" class="form-label">TÊN SẢN PHẨM</label> 
+						<div class="form-control">{{variant.product.name}}</div>
+						<span class="text-danger" ng-show="error_variant.product">{{error_variant.product}}</span>
+					</div>
+					<div class="mb-3 col-md-12">
+						<label for="name" class="form-label">TÊN BIẾN THỂ</label> 
+						<input ng-model="variant.name" class="form-control" type="text" id="name" name="name" placeholder="Name" autofocus />
+						<span class="text-danger" ng-show="error_variant.name">{{error_variant.name}}</span>
+					</div>
+					<div class="mb-3 col-md-12">
+						<label for="product_attributes" class="form-label">BIẾN THỂ SẢN PHẨM</label> 
+						<div class="d-flex align-items-start gap-3">
+							<div style="width: 80%; height: 40px;" class="form-control" id="product_attributes" name="product_attributes">
+								<span ng-repeat="attribute in variant.attributes" class="badge bg-label-primary me-1">{{attribute.name}}</span> 
+							</div>
+							<button style="width: 20%;" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+								Thuộc tính
+							</button>
+							<!-- Modal -->
+							<div class="modal fade" id="staticBackdrop"
+								data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+								aria-labelledby="staticBackdropLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="staticBackdropLabel">Danh Sách Thuộc Tính Sản Phẩm</h5>
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="modal-body">
+											<div class="demo-inline-spacing mt-3">
+												<p class="text-muted mb-0">
+													<label ng-repeat="attribute in attributes">
+														<span class="badge bg-primary me-2">{{attribute.name}}</span>
+													</label>
+								                </p>
+												<div class="list-group">
+													<label class="list-group-item" ng-repeat="attribute_group in attribute_groups"> {{attribute_group.name}}
+														<div class="demo-inline-spacing mt-3">
+															<div class="list-group list-group-flush">
+																<label class="list-group-item list-group-item-action" ng-repeat="attribute in attribute_group.attributes">
+																	<input class="form-check-input me-1" type="checkbox"
+																	ng-checked="attribute_of(attribute)"
+																	ng-click="chooseAttribute(attribute)" />{{attribute.name}}
+																</label>
+															</div>
+														</div>
+													</label> 
+												</div>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-primary">Cài lại</button>
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<span class="text-danger" ng-show="error_variant.attributes">{{error_variant.attributes}}</span>
+					</div>
+					<div class="mb-3 col-md-12">
+						<label for="price" class="form-label">GIÁ SẢN PHẨM</label> 
+						<div class="d-flex align-items-start gap-3">
+							<input ng-model="variant.price" style="width: 80%;" class="form-control" type="text" id="price" name="price" placeholder="Price" autofocus />
+							<button ng-if="variant.id" ng-click="updatePriceVariant()" style="width: 20%;" type="button" class="btn btn-primary">
+								Cập nhật
+							</button>
+						</div>
+						<span class="text-danger" ng-show="error_variant.price">{{error_variant.price}}</span>
+					</div>
+					<div class="mb-3 col-md-12">
+						<label class="form-label" for="weight">TRỌNG LƯỢNG <i style="color: red;">(TÍNH TRỌNG LƯỢNG KHI ĐÓNG GÓI HÀNG)</i> </label> 
+						<div class="d-flex align-items-start gap-3">
+							<input class="form-control" ng-model="variant.weight" type="text" placeholder="Weight">
+		        			<select ng-model="variant.weight_unit" id="weight_units" class="select2 form-select">
+								<option value="">Weight Unit</option>
+								<option value="WEIGHT_UNIT_KG">Kg</option>
+								<option value="WEIGHT_UNIT_GAM">Gam</option>
+							</select>
+						</div>
+						<span class="text-danger" ng-show="error_variant.weight">{{error_variant.weight}}</span>
+						<span class="text-danger" ng-show="error_variant.weight_unit">{{error_variant.weight_unit}}</span>
+					</div>
+					<div class="mb-3 col-md-12">
+						<label class="form-label" for="height">CHIỀU CAO <i style="color: red;">(TÍNH CHIỀU CAO KHI ĐÓNG GÓI HÀNG)</i> </label> 
+						<div class="d-flex align-items-start gap-3">
+							<input class="form-control" ng-model="variant.height" type="text" placeholder="Height">
+		        			<select ng-model="variant.height_unit" id="height_units" class="select2 form-select">
+								<option value="">Height Unit</option>
+								<option value="SIZE_UNIT_CM">Cm</option>
+								<option value="SIZE_UNIT_MM">Mm</option>
+							</select>
+						</div>
+						<span class="text-danger" ng-show="error_variant.height">{{error_variant.height}}</span>
+						<span class="text-danger" ng-show="error_variant.height_unit">{{error_variant.height_unit}}</span>
+					</div>
+					<div class="mb-3 col-md-12">
+						<label class="form-label" for="width">CHIỀU RỘNG <i style="color: red;">(TÍNH CHIỀU RỘNG KHI ĐÓNG GÓI HÀNG)</i> </label> 
+						<div class="d-flex align-items-start gap-3">
+							<input class="form-control" ng-model="variant.width" type="text" placeholder="Width">
+		        			<select ng-model="variant.width_unit" id="width_units" class="select2 form-select">
+								<option value="">Width Unit</option>
+								<option value="SIZE_UNIT_CM">Cm</option>
+								<option value="SIZE_UNIT_MM">Mm</option>
+							</select>
+						</div>
+						<span class="text-danger" ng-show="error_variant.width">{{error_variant.width}}</span>
+						<span class="text-danger" ng-show="error_variant.width_unit">{{error_variant.width_unit}}</span>
+					</div>
+					<div class="mb-3 col-md-12">
+						<label class="form-label" for="activity">TRẠNG THÁI</label> 
+						<select ng-model="variant.activity"  id="activity" class="select2 form-select">
+							<option ng-value="">Status</option>
+							<option ng-value="true">Đang bán</option>
+							<option ng-value="false">Dừng bán</option>
+						</select>
+						<span class="text-danger" ng-show="error_variant.activity">{{error_variant.activity}}</span>
+					</div>
+				</div>
+				<div class="mb-3 col-md-5">
+					<div class="mb-3 col-md-12">
+						<label class="form-label">DANH SÁCH BIẾN THỂ</label>
+						<div class="table-responsive text-nowrap">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>TÊN</th>
+										<th>HÌNH ẢNH</th>
+										<th>TRẠNG THÁI</th>
+										<th>HÀNH ĐỘNG</th>
+									</tr>
+								</thead>
+								<tbody class="table-border-bottom-0">
+									<tr ng-repeat="variant in variants">
+										<td><i class="fab fa-angular fa-lg text-danger me-3"></i>
+											<strong>{{variant.name}}</strong></td>
+										<td>
+											<ul
+												class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+												<li data-bs-toggle="tooltip" data-popup="tooltip-custom"
+													data-bs-placement="top" class="avatar avatar-xs pull-up"
+													title="Lilian Fuller"><img
+													ng-src="/variants/{{variant.image}}" alt="image-variant"
+													class="rounded-circle" /></li>
+											</ul>
+										</td>
+										<td><span class="badge bg-label-primary me-1">{{variant.activity?'Đang bán':'Dừng bán'}}</span></td>
+										<td>
+											<div class="dropdown">
+												<button type="button"
+													class="btn p-0 dropdown-toggle hide-arrow"
+													data-bs-toggle="dropdown">
+													<i class="bx bx-dots-vertical-rounded"></i>
+												</button>
+												<div class="dropdown-menu">
+													<a ng-click="editVariant(variant)" class="dropdown-item" href="javascript:void(0);">
+														<i class="bx bx-edit-alt me-1"></i> Edit
+													</a> 
+													<a class="dropdown-item" href="javascript:void(0);"><i
+														class="bx bx-trash me-1"></i> Delete</a>
+												</div>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="mt-2">
+					<button ng-if="variant.product.id && !variant.id" ng-click="createVariant()" type="submit" class="btn btn-primary me-2">Tạo biến thể</button>
+					<button ng-if="variant.id" ng-click="updateVariant()" type="submit" class="btn btn-primary me-2">Cập nhật biến thể</button>
+					<button ng-if="variant.id" ng-click="deleteVariant()" type="submit" class="btn btn-danger deactivate-account me-2">Xóa biến thể</button>
+					<button ng-if="variant.product.id" ng-click="resetVariant(variant.product)" type="reset" class="btn btn-outline-secondary me-2">Cài lại</button>
+					<button ng-if="variant.product.id" ng-click="resetVariantAll()" type="reset" class="btn btn-outline-secondary">Hủy bỏ</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<!-- /Account -->
+</div>

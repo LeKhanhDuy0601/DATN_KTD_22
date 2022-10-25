@@ -1,0 +1,178 @@
+<div class="card mb-4">
+    <h5 class="card-header">Chi tiết hồ sơ</h5>
+    <!-- Account -->
+    <div class="card-body">
+        <div class="d-flex align-items-start align-items-sm-center gap-4">
+            <img ng-src="/avatars/{{form.avatar}}" alt="user-avatar" class="d-block rounded" height="100" width="100" id="uploadedAvatar" />
+            <div class="button-wrapper">
+                <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
+					<span class="d-none d-sm-block">Tải lên ảnh mới</span> <i
+					class="bx bx-upload d-block d-sm-none"></i> 
+					<input type="file" onchange="angular.element(this).scope().avatarChanged(this.files)"
+					id="upload" class="account-file-input" hidden
+					accept="image/png, image/jpeg" />
+				</label>
+                <button type="button" ng-click="resetAvatar()" class="btn btn-outline-secondary account-image-reset mb-4">
+					<i class="bx bx-reset d-block d-sm-none"></i> <span
+						class="d-none d-sm-block">Cài lại</span>
+				</button>
+
+                <p class="text-muted mb-0">
+                    <label ng-repeat="role in form.roles">
+						<span ng-if="role.code == 'ROLE_GUEST'" class="badge bg-primary me-2">{{role.name}}</span>
+                        <span ng-if="role.code == 'ROLE_EMPLOYEE'" class="badge bg-success me-2">{{role.name}}</span>
+                        <span ng-if="role.code == 'ROLE_MANAGER'" class="badge bg-warning me-2">{{role.name}}</span>
+                        <span ng-if="role.code == 'ROLE_ADMIN'" class="badge bg-danger me-2">{{role.name}}</span>
+					</label>
+                </p>
+            </div>
+        </div>
+    </div>
+    <hr class="my-0" />
+    <div class="card-body">
+        <form id="formAccountSettings" method="POST" onsubmit="return false">
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label for="username" class="form-label">TÊN ĐĂNG NHẬP</label>
+                    <input ng-if="!form.id" ng-model="form.username" class="form-control" type="text" id="username" name="username" placeholder="Username" autofocus />
+                    <div ng-if="form.id" class="form-control">{{form.username}}</div>
+                    <span class="text-danger" ng-show="error.username">{{error.username}}</span>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="fullname" class="form-label">HỌ VÀ TÊN</label> <input ng-model="form.fullname" class="form-control" type="text" name="fullname" id="fullname" placeholder="Fullname" />
+                    <span class="text-danger" ng-show="error.fullname">{{error.fullname}}</span>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="password" class="form-label">MẬT KHẨU</label> <input ng-model="form.password" class="form-control" type="password" id="password" name="password" placeholder="Password" />
+                    <span class="text-danger" ng-show="error.password">{{error.password}}</span>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="confirmPassword" class="form-label">XÁC NHẬN MẬT KHẨU</label> <input ng-model="form.confirm_password" type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" />
+                    <span class="text-danger" ng-show="error.confirm_password">{{error.confirm_password}}</span>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label class="form-label" for="phoneNumber">Số điện thoại</label>
+                    <div class="input-group input-group-merge">
+                        <span class="input-group-text">VN (+84)</span> <input type="text" ng-model="form.phone" id="phoneNumber" name="phoneNumber" class="form-control" placeholder="Phone Number" />
+                    </div>
+                    <span class="text-danger" ng-show="error.phone">{{error.phone}}</span>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="email" class="form-label">E-MAIL</label> <input ng-model="form.email" type="text" class="form-control" id="email" name="email" placeholder="john.doe@example.com" />
+                    <span class="text-danger" ng-show="error.email">{{error.email}}</span>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="birthday" class="form-label">SINH NGÀY</label> <input ng-model="form.birthday" type="date" class="form-control" id="birthday" name="birthday" placeholder="Birthday" />
+                    <span class="text-danger" ng-show="error.birthday">{{error.birthday}}</span>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="gender" class="form-label">GIỚI TÍNH</label>
+                    <select ng-model="form.gender" id="gender" class="select2 form-select">
+						<option value="">Gender</option>
+						<option value="OTHER">Khác</option>
+						<option value="MALE">Nam</option>
+						<option value="FEMALE">Nữ</option>
+					</select>
+                    <span class="text-danger" ng-show="error.gender">{{error.gender}}</span>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="address" class="form-label">Địa chỉ</label> <input ng-model="form.address" type="text" class="form-control" id="address" name="address" placeholder="Address" />
+                    <span class="text-danger" ng-show="error.address">{{error.address}}</span>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label class="form-label" for="cities">Tỉnh/Thành phố</label>
+                    <select ng-model="form.city" ng-change="getDistrictsByCity(form.city)" id="cities" class="select2 form-select">
+						<option value="">City</option>
+						<option ng-repeat="city in cities" ng-value="city">{{city.name}}</option>
+					</select>
+                    <span class="text-danger" ng-show="error.city">{{error.city}}</span>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="districts" class="form-label">Quận/Huyện</label>
+                    <select ng-model="form.district" ng-change="getWardsByDistrict(form.district)" id="districts" class="select2 form-select">
+						<option value="">District</option>
+<option ng-repeat="district in districts" ng-value="district">{{district.name}}</option>
+					</select>
+                    <span class="text-danger" ng-show="error.district">{{error.district}}</span>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="wards" class="form-label">Phường/Xã</label>
+                    <select ng-model="form.ward" id="wards" class="select3 form-select">
+						<option value="">Ward</option>
+						<option ng-repeat="ward in wards" ng-value="ward">{{ward.name}}</option>
+					</select>
+                    <span class="text-danger" ng-show="error.ward">{{error.ward}}</span>
+                </div>
+            </div>
+            <div class="mt-2">
+                <button ng-if="!form.id" type="submit" ng-click="create()" class="btn btn-primary me-2">Tạo tài khoản</button>
+                <button ng-if="form.id && checked_deleted == null && checked_blocked == null && checked_open == null" type="submit" ng-click="update()" class="btn btn-primary me-2">Cập nhật tài khoản</button>
+                <button ng-if="form.id && checked_blocked == null && form.activity == true" type="submit" ng-click="blocked_click()" class="btn btn-warning me-2">Khóa tài khoản</button>
+                <button ng-if="form.id && checked_open == null && form.activity == false" type="submit" ng-click="open_click()" class="btn btn-success me-2">Mở khóa tài khoản</button>
+                <button ng-if="form.id && checked_deleted == null" type="submit" ng-click="deleted_click()" class="btn btn-danger me-2">Xóa tài khoản</button>
+                <button type="reset" ng-click="reset()" class="btn btn-outline-secondary">Hủy bỏ</button>
+            </div>
+        </form>
+    </div>
+    <!-- /Account -->
+</div>
+
+<div class="card" ng-if="form.id && checked_blocked == 1">
+    <h5 class="card-header">Khóa tài khoản</h5>
+    <div class="card-body">
+        <div class="mb-3 col-12 mb-0">
+            <div class="alert alert-warning">
+                <h6 class="alert-heading fw-bold mb-1">Bạn có chắc rằng bạn muốn khóa tài khoản này?</h6>
+                <p class="mb-0">Sau khi bạn khóa tài khoản này, tài khoản sẽ không được phép truy cập vào hệ thống. Hãy chắc chắn.</p>
+            </div>
+        </div>
+        <form id="formAccountDeactivation" onsubmit="return false">
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" ng-model="checked_confirm" name="accountActivation" id="accountActivation" /> <label class="form-check-label" for="accountActivation">Tôi xác nhận việc khóa tài khoản này</label>
+            </div>
+            <span class="text-danger" ng-show="error.confirm">{{error.confirm}}</span> <br> <br>
+            <button type="submit" ng-click="block(checked_confirm)" class="btn btn-danger deactivate-account">Khóa tài khoản</button>
+            <button type="reset" ng-click="reset_deleted_blocked()" class="btn btn-outline-secondary">Hủy bỏ</button>
+        </form>
+    </div>
+</div>
+<br>
+<div class="card" ng-if="form.id && checked_open == 1">
+    <h5 class="card-header">Mở khóa tài khoản</h5>
+    <div class="card-body">
+        <div class="mb-3 col-12 mb-0">
+            <div class="alert alert-warning">
+                <h6 class="alert-heading fw-bold mb-1">Bạn có chắc rằng bạn muốn mở khóa tài khoản này?</h6>
+                <p class="mb-0">Sau khi bạn mở khóa tài khoản này, tài khoản sẽ được phép truy cập vào hệ thống. Hãy chắc chắn.</p>
+            </div>
+        </div>
+        <form id="formAccountDeactivation" onsubmit="return false">
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" ng-model="checked_confirm" name="accountActivation" id="accountActivation" /> <label class="form-check-label" for="accountActivation">Tôi xác nhận việc mở khóa tài khoản này</label>
+            </div>
+            <span class="text-danger" ng-show="error.confirm">{{error.confirm}}</span> <br> <br>
+            <button type="submit" ng-click="open(checked_confirm)" class="btn btn-danger deactivate-account">Mở khóa tài khoản</button>
+            <button type="reset" ng-click="reset_deleted_blocked()" class="btn btn-outline-secondary">Hủy bỏ</button>
+        </form>
+    </div>
+</div>
+<br>
+<div class="card" ng-if="form.id && checked_deleted == 1">
+    <h5 class="card-header">Xóa tài khoản</h5>
+    <div class="card-body">
+        <div class="mb-3 col-12 mb-0">
+            <div class="alert alert-warning">
+                <h6 class="alert-heading fw-bold mb-1">Bạn có chắc rằng bạn muốn xóa tài khoản này?</h6>
+                <p class="mb-0">Sau khi bạn xóa tài khoản này, bạn sẽ không thể quay lại. Hãy chắc chắn.</p>
+            </div>
+        </div>
+        <form id="formAccountDeactivation2" onsubmit="return false">
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" ng-model="checked_confirm" name="accountActivation2" id="accountActivation2" /> <label class="form-check-label" for="accountActivation2">Tôi xác nhận việc xóa tài khoản này.</label>
+            </div>
+            <span class="text-danger" ng-show="error.confirm">{{error.confirm}}</span> <br> <br>
+            <button type="submit" ng-click="delete(checked_confirm)" class="btn btn-danger deactivate-account me-2">Xóa tài khoản</button>
+            <button type="reset" ng-click="reset_deleted_blocked()" class="btn btn-outline-secondary">Hủy bỏ</button>
+        </form>
+    </div>
+</div>

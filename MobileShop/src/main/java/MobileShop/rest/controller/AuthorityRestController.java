@@ -1,0 +1,38 @@
+package MobileShop.rest.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import MobileShop.Entity.Authority;
+import MobileShop.service.AuthorityService;
+
+@CrossOrigin("*")
+@RestController
+@RequestMapping("/rest/authorities")
+public class AuthorityRestController {
+	@Autowired
+	AuthorityService authorityService;
+	
+	@GetMapping()
+	public List<Authority> findAll() {
+		return authorityService.findAll();
+	}
+	
+	@PostMapping()
+	public Authority create(@RequestBody Authority authority) {
+		return authorityService.create(authority);
+	}
+	@DeleteMapping("/{id}")
+	public void delete(@PathVariable("id") Integer id) {
+		authorityService.delete(id);
+	}
+}

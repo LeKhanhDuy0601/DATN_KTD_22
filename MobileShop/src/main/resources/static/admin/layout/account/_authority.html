@@ -1,0 +1,63 @@
+<div class="card">
+    <!-- Notifications -->
+    <h5 class="card-header">CẤP QUYỀN HẠN TÀI KHOẢN</h5>
+    <div class="card-body">
+        <div class="d-flex align-items-start align-items-sm-center gap-4">
+            <img ng-src="/avatars/{{form.avatar}}" alt="user-avatar" class="d-block rounded" height="100" width="100" id="uploadedAvatar" />
+            <div class="button-wrapper">
+                <label for="upload" class="me-2 mb-4" tabindex="0">
+					<div class="form-control">{{form.username}}</div>
+				</label>
+                <label for="upload" class="me-2 mb-4" tabindex="0">
+					<div class="form-control">{{form.fullname}}</div>
+				</label>
+
+                <p class="text-muted mb-0">
+                    <label ng-repeat="role in form.roles">
+						<span ng-if="role.code == 'ROLE_GUEST'" class="badge bg-primary me-2">{{role.name}}</span>
+                        <span ng-if="role.code == 'ROLE_EMPLOYEE'" class="badge bg-success me-2">{{role.name}}</span>
+                        <span ng-if="role.code == 'ROLE_MANAGER'" class="badge bg-warning me-2">{{role.name}}</span>
+                        <span ng-if="role.code == 'ROLE_ADMIN'" class="badge bg-danger me-2">{{role.name}}</span>
+					</label>
+                </p>
+            </div>
+        </div>
+        <br>
+        <span ng-if="sum_message==null">Để tài khoản này có thể truy cập vào hệ thống bạn cần cấp quyền hạn cho tài khoản này. <span class="notificationRequest"><strong>Vui lòng chọn quyền hạn.</strong></span></span>
+        <span ng-if="sum_message!=null" class="text-danger">Để tài khoản này có thể truy cập vào hệ thống bạn cần cấp quyền hạn cho tài khoản này. <span class="notificationRequest"><strong>Vui lòng chọn quyền hạn.</strong></span></span>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped table-borderless border-bottom">
+            <thead>
+                <tr>
+                    <th class="text-nowrap">Vai trò</th>
+                    <th class="text-nowrap text-center">Ⓒ Mã</th>
+                    <th class="text-nowrap text-center">⬈ CẤP BẬC</th>
+                    <th class="text-nowrap text-center">✔ CẤP QUYỀN</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="role in roles">
+                    <td class="text-nowrap">{{role.name}}</td>
+                    <td>
+                        <div class="form-check d-flex justify-content-center">
+                            {{role.code}}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-check d-flex justify-content-center">
+                            {{role.level}}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-check d-flex justify-content-center">
+                            <input class="form-check-input" type="checkbox" ng-checked="authority_of(role)" ng-click="authority_changed(role)" />
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- /authority -->
+</div>

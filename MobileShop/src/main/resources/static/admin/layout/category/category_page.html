@@ -1,0 +1,183 @@
+<div class="content-wrapper">
+	<!-- Content -->
+
+	<div class="container-xxl flex-grow-1 container-p-y">
+		<h4 class="fw-bold py-3 mb-4">
+			<span class="text-muted fw-light">Quản lý sản phẩm/</span> Danh mục sản phẩm
+		</h4>
+
+		<!-- Basic Layout & Basic with Icons -->
+		<div class="row">
+			<!-- Basic Layout -->
+			<div class="col-xxl">
+				<div class="card mb-4">
+					<div
+						class="card-header d-flex align-items-center justify-content-between">
+						<h5 class="mb-0">Thông tin chi tiết</h5>
+					</div>
+					<div class="card-body">
+						<form>
+							<div class="row mb-3">
+								<label class="col-sm-3 col-form-label" for="basic-default-name">MÃ DANH MỤC</label>
+								<div class="col-sm-9">
+									<input ng-model="form.code" type="text" class="form-control" id="basic-default-name"
+										placeholder="Code" />
+									<span class="text-danger" ng-show="error.code">{{error.code}}</span>
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label class="col-sm-3 col-form-label"
+									for="basic-default-company">TÊN DANH MỤC</label>
+								<div class="col-sm-9">
+									<input ng-model="form.name" type="text" class="form-control"
+										id="basic-default-company" placeholder="Name" />
+									<span class="text-danger" ng-show="error.name">{{error.name}}</span>
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label class="col-sm-3 col-form-label"
+									for="categoryGroup">NHÓM</label>
+								<div class="col-sm-9">
+									<select ng-model="form.categoryGroup" id="categoryGroup" class="select2 form-select">
+										<option value="">CATEGORY GROUP</option>
+										<option ng-repeat="category_group in category_groups" ng-value="category_group">{{category_group.name}}</option>
+									</select>
+									<span class="text-danger" ng-show="error.categoryGroup">{{error.categoryGroup}}</span>
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label class="col-sm-3 col-form-label" for="basic-default-email">CẤP BẬC</label>
+								<div class="col-sm-9">
+									<div class="input-group input-group-merge">
+										<input ng-model="form.level" type="text" id="basic-default-email"
+											class="form-control" placeholder="Level"
+											aria-label="john.doe" aria-describedby="basic-default-email2" />
+										<span class="text-danger" ng-show="error.level">{{error.level}}</span>
+									</div>
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label class="col-sm-3 col-form-label" for="view">HIỂN THỊ</label>
+								<div class="col-sm-9">
+									<select ng-model="form.view" id="view" class="select2 form-select">
+										<option value="">View</option>
+										<option value="true">Có</option>
+										<option value="false">Không</option>
+									</select>
+									<span class="text-danger" ng-show="error.activity">{{error.activity}}</span>
+								</div>
+							</div>
+							<div class="row mb-3">
+								<label class="col-sm-3 col-form-label" for="basic-default-phone">TRẠNG THÁI</label>
+								<div class="col-sm-9">
+									<select ng-model="form.activity" id="activity" class="select2 form-select">
+										<option value="">Status</option>
+										<option value="true">Hoạt động</option>
+										<option value="false">Khóa</option>
+									</select>
+									<span class="text-danger" ng-show="error.activity">{{error.activity}}</span>
+								</div>
+							</div>
+							<div class="row justify-content-end">
+								<div class="col-sm-9">
+									<button ng-if="!form.id" ng-click="create()" type="submit" class="btn btn-primary me-2">Lưu</button>
+									<button ng-if="form.id" ng-click="update()" type="submit" class="btn btn-primary me-2">Cập nhật</button>
+									<button type="reset"  ng-click="reset()" class="btn btn-outline-secondary">Hủy bỏ</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<!-- Basic with Icons -->
+			<div class="col-xxl">
+				<div class="card">
+					<h5 class="card-header">DANH SÁCH CÁC DANH MỤC SẢN PHẨM</h5>
+					<div class="card-body demo-vertical-spacing demo-only-element col-7">
+						<div class="d-flex align-items-start gap-3">
+							<input class="form-control" ng-model="key_search" type="search" placeholder="TÊN DANH MỤC" aria-label="Search">
+		        			<button ng-click="search(key_search)" class="btn btn-outline-success" type="submit">
+		        				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+		  							<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+								</svg>
+							</button>
+						</div>
+					</div>
+					<div class="table-responsive text-nowrap">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>MÃ</th>
+									<th>TÊN DANH MỤC</th>
+									<th>NHÓM</th>
+									<th>TRẠNG THÁI</th>
+									<th>HÀNH ĐỘNG</th>
+								</tr>
+							</thead>
+							<tbody class="table-border-bottom-0">
+								<tr ng-repeat="category in pager.categories">
+									<td><i class="fab fa-angular fa-lg text-danger me-3"></i>
+										<strong>{{category.code}}</strong></td>
+									<td>{{category.name}}</td>
+									<td>{{category.categoryGroup.name}}</td>
+									<td><span class="badge bg-label-primary me-1">{{category.activity?'Hoạt động':'Đang khóa'}}</span></td>
+									<td>
+										<div class="dropdown">
+											<button type="button"
+												class="btn p-0 dropdown-toggle hide-arrow"
+												data-bs-toggle="dropdown">
+												<i class="bx bx-dots-vertical-rounded"></i>
+											</button>
+											<div class="dropdown-menu">
+												<a class="dropdown-item" href="javascript:void(0);" ng-click="edit(category)"><i
+													class="bx bx-edit-alt me-1"></i> Chỉnh sửa</a> 
+												<a class="dropdown-item" href="javascript:void(0);" ng-click="delete(category)"><i
+													class="bx bx-trash me-1"></i> Xóa</a>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="card mb-4">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-lg-4"></div>
+							<div class="col-lg-8">
+								<div class="demo-inline-spacing">
+									<nav aria-label="Page navigation">
+										<ul class="pagination">
+											<li class="page-item prev" ng-click="pager.first()">
+												<a class="page-link" href="javascript:void(0);">
+													<i class="tf-icon bx bx-chevrons-left"></i>
+												</a>
+											</li>
+											<li class="page-item prev" ng-click="pager.prev()">
+												<a class="page-link" href="javascript:void(0);">
+													<i class="tf-icon bx bx-chevron-left"></i>
+												</a>
+											</li>
+											<li class="page-item next" ng-click="pager.next()">
+												<a class="page-link" href="javascript:void(0);">
+													<i class="tf-icon bx bx-chevron-right"></i>
+												</a>
+											</li>
+											<li class="page-item next" ng-click="pager.last()">
+												<a class="page-link" href="javascript:void(0);">
+													<i class="tf-icon bx bx-chevrons-right"></i>
+												</a>
+											</li>
+										</ul>
+									</nav>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</div>

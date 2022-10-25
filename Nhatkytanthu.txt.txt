@@ -1,0 +1,14 @@
+-> note lai nhớ ghi tiếng việt có dấu, ghi tên người note, nội dung ngắn dể hiểu
+và nhớ ghi ngày
+
+---------------------------------------------------------------------------------------------------------------------------
+---				NHẬT KÝ TÂN THỦ		                ---		 ---								              ---	
+---			     ANH EM NHÀ KTD MÃI ĐỈNH	       		---
+----------------------------------------------------------------------------------------------------------------------------
+
+- ngày 30/09/2020 làm load được chức năng hình ảnh, load api cua quận huyện....
+- 30/09/2022(L.Duy) Up Entity and DAO
+- 2/10/2022(L.Duy) Đăng nhập- đăng ký-quên mật khẩu
+- 3/10/2022(L.Duy) Thương hiệu-nhóm danh mục-danh mục sản phẩm
+
+-25/10/2022 chuyển nhà cho project https://github.com/LeKhanhDuy0601/DATN_KTD_22.git
